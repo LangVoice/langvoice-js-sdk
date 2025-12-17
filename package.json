@@ -1,0 +1,123 @@
+{
+  "name": "langvoice-sdk",
+  "version": "0.1.0",
+  "description": "JavaScript/TypeScript SDK for LangVoice Text-to-Speech API with AI agent integrations",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./tools": {
+      "import": "./dist/tools/index.mjs",
+      "require": "./dist/tools/index.js",
+      "types": "./dist/tools/index.d.ts"
+    },
+    "./tools/openai": {
+      "import": "./dist/tools/openai-tools.mjs",
+      "require": "./dist/tools/openai-tools.js",
+      "types": "./dist/tools/openai-tools.d.ts"
+    },
+    "./tools/langchain": {
+      "import": "./dist/tools/langchain-tools.mjs",
+      "require": "./dist/tools/langchain-tools.js",
+      "types": "./dist/tools/langchain-tools.d.ts"
+    },
+    "./tools/autogen": {
+      "import": "./dist/tools/autogen-tools.mjs",
+      "require": "./dist/tools/autogen-tools.js",
+      "types": "./dist/tools/autogen-tools.d.ts"
+    },
+    "./tools/generic": {
+      "import": "./dist/tools/generic-tools.mjs",
+      "require": "./dist/tools/generic-tools.js",
+      "types": "./dist/tools/generic-tools.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "build:types": "tsc --emitDeclarationOnly",
+    "clean": "rimraf dist",
+    "lint": "eslint src --ext .ts",
+    "lint:fix": "eslint src --ext .ts --fix",
+    "format": "prettier --write \"src/**/*.ts\" \"examples/**/*.ts\"",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "prepublishOnly": "npm run clean && npm run build",
+    "publish:test": "npm publish --registry https://registry.npmjs.org --dry-run",
+    "publish:npm": "npm publish --access public",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "release": "npm run clean && npm run build && npm publish --access public"
+  },
+  "keywords": [
+    "tts",
+    "text-to-speech",
+    "langvoice",
+    "ai",
+    "langchain",
+    "openai",
+    "autogen",
+    "speech",
+    "voice",
+    "audio",
+    "speech-synthesis",
+    "voice-generation",
+    "ai-agents"
+  ],
+  "author": {
+    "name": "LangVoice",
+    "email": "langvoice.official@gmail.com",
+    "url": "https://www.langvoice.pro/"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LangVoice/langvoice-js-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/LangVoice/langvoice-js-sdk/issues"
+  },
+  "homepage": "https://www.langvoice.pro/",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "peerDependencies": {
+    "@langchain/core": ">=0.1.0",
+    "openai": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "openai": {
+      "optional": true
+    },
+    "@langchain/core": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@langchain/core": "^1.1.6",
+    "@langchain/openai": "^1.2.0",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "@vitest/coverage-v8": "^1.0.4",
+    "eslint": "^8.55.0",
+    "langchain": "^1.2.1",
+    "openai": "^4.20.0",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.2",
+    "vitest": "^1.0.4"
+  }
+}
