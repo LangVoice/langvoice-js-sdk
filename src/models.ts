@@ -167,6 +167,49 @@ export class MultiVoiceRequest implements MultiVoiceRequestData {
   }
 }
 
+export interface VoiceCloningRequestData {
+  text: string;
+  voice_sample_base64: string;
+  speed: number;
+}
+
+/**
+ * Voice cloning request model
+ */
+export class VoiceCloningRequest implements VoiceCloningRequestData {
+  public readonly text: string;
+  public readonly voice_sample_base64: string;
+  public readonly speed: number;
+
+  constructor(data: Partial<VoiceCloningRequestData> & { text: string; voice_sample_base64: string }) {
+    if (!data.text || data.text.length === 0) {
+      throw new Error('Text is required');
+    }
+    if (data.text.length > 5000) {
+      throw new Error('Text must be 5000 characters or less');
+    }
+    if (!data.voice_sample_base64) {
+      throw new Error('Voice sample is required');
+    }
+
+    this.text = data.text;
+    this.voice_sample_base64 = data.voice_sample_base64;
+    this.speed = data.speed ?? 1.0;
+
+    if (this.speed < 0.5 || this.speed > 2.0) {
+      throw new Error('Speed must be between 0.5 and 2.0');
+    }
+  }
+
+  toJSON(): VoiceCloningRequestData {
+    return {
+      text: this.text,
+      voice_sample_base64: this.voice_sample_base64,
+      speed: this.speed,
+    };
+  }
+}
+
 /**
  * Generate response model
  */

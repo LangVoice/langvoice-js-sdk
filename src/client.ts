@@ -7,6 +7,7 @@ import {
   Language,
   GenerateRequest,
   MultiVoiceRequest,
+  VoiceCloningRequest,
   GenerateResponse,
   VoicesResponse,
   LanguagesResponse,
@@ -52,6 +53,15 @@ export interface MultiVoiceOptions {
   text: string;
   /** Language code for all voices */
   language?: string;
+  /** Speech speed from 0.5 to 2.0 */
+  speed?: number;
+}
+
+export interface VoiceCloningOptions {
+  /** Text to convert to speech (max 5000 characters) */
+  text: string;
+  /** Base64 encoded voice sample audio */
+  voiceSampleBase64: string;
   /** Speech speed from 0.5 to 2.0 */
   speed?: number;
 }
@@ -312,6 +322,47 @@ export class LangVoiceClient {
     const { data, headers } = await this.requestBinary(
       'POST',
       '/tts/multi-voice-text',
+      request.toJSON()
+    );
+
+    return new GenerateResponse({
+      audioData: data,
+      duration: this.parseFloatHeader(headers.get('X-Audio-Duration')),
+      generationTime: this.parseFloatHeader(headers.get('X-Generation-Time')),
+      charactersProcessed: this.parseIntHeader(headers.get('X-Characters-Processed')),
+    });
+  }
+
+  /**
+   * Generate speech using a cloned voice from provided audio sample
+   *
+   * @param options - Voice cloning options
+   * @returns GenerateResponse with audio data and metadata
+   *
+   * @example
+   * ```typescript
+   * // Convert audio file to base64 first
+   * const fs = require('fs');
+   * const audioBuffer = fs.readFileSync('voice_sample.wav');
+   * const base64Audio = audioBuffer.toString('base64');
+   *
+   * const response = await client.generateCloned({
+   *   text: 'Hello, this is my cloned voice!',
+   *   voiceSampleBase64: base64Audio,
+   *   speed: 1.0,
+   * });
+   * ```
+   */
+  async generateCloned(options: VoiceCloningOptions): Promise<GenerateResponse> {
+    const request = new VoiceCloningRequest({
+      text: options.text,
+      voice_sample_base64: options.voiceSampleBase64,
+      speed: options.speed,
+    });
+
+    const { data, headers } = await this.requestBinary(
+      'POST',
+      '/tts/generate-cloned',
       request.toJSON()
     );
 
