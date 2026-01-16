@@ -106,6 +106,31 @@ const response = await client.generateMultiVoice({
 writeFileSync('podcast.mp3', response.audioData);
 ```
 
+### Voice Cloning
+
+Clone any voice from an audio sample:
+
+```typescript
+import { LangVoiceClient } from 'langvoice-sdk';
+import { readFileSync, writeFileSync } from 'fs';
+
+const client = new LangVoiceClient({ apiKey: 'your-api-key' });
+
+// Read your voice sample
+const voiceSample = readFileSync('sample.wav');
+const voiceSampleBase64 = voiceSample.toString('base64');
+
+// Clone and generate
+const response = await client.generateCloned({
+  text: 'Hello, this is my cloned voice speaking!',
+  voiceSampleBase64: voiceSampleBase64,
+  speed: 1.0,
+});
+
+writeFileSync('cloned.mp3', response.audioData);
+console.log(`Generated in ${response.generationTime}s`);
+```
+
 ### Simple One-Liner
 
 ```typescript
